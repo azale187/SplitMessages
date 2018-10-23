@@ -10,27 +10,20 @@ pipeline {
                 githubOrganizationSetup()
             }
         }
-        stage('Build and Scan') {
+        stage('Build') {
             steps {
-                parallel (
-                    build: {
-                        nebulaGradleBuild()
-                        dockerImageBuild()
-                    },
-                    scan: {
-                        checkmarxScan()
-                    }
-                )
+                nebulaGradleBuild()
             }
             post {
                 always {
-                    echo "Built Version: ${env['VERSION']}"
+                    echo "Built Version: \${env['VERSION']}"
+                    junit 'build/test-results/**/*.xml'
                 }
             }
         }
         stage('Publish') {
             steps {
-                dockerImagePublish()
+                publishDockerImage()
             }
         }
         stage('Deploy to Swarm') {
@@ -40,9 +33,6 @@ pipeline {
         }
     }
     post {
-        always {
-            junit "build/test-results/**/*.xml"
-        }
         changed {
             buildNotification()
         }
