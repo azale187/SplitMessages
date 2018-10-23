@@ -1,0 +1,54 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.6.RELEASE'
+	}
+}
+
+plugins {
+    id 'groovy'
+    id 'idea'
+    id 'org.springframework.boot' version '2.0.6.RELEASE'
+    id 'nebula.release' version '6.1.1'
+    id 'io.spring.dependency-management' version '0.6.0.RELEASE'
+    id 'com.gorylenko.gradle-git-properties' version '1.4.17'
+}
+
+bootRun {
+    systemProperties = System.properties
+    jvmArgs += "-Dspring.output.ansi.enabled=ALWAYS"
+}
+
+jar {
+    baseName = project.name
+}
+
+group = 'com.bsb.fms'
+
+sourceCompatibility = 1.8
+
+repositories {
+
+    maven { url "$artifactory_contexturl/$artifactory_repo" }
+}
+
+
+ext {
+    buildTime = new Date().format("yyyyMMddHHmm")
+}
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-actuator')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('com.bsb.common:bluestem-metrics-spring-boot-starter:0.0.35')
+    compile('org.apache.httpcomponents:httpclient')
+    compile('org.codehaus.groovy:groovy')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
+}
+
+springBoot {
+    buildInfo()
+}
+
+test {
+    systemProperty "spring.profiles.active", System.getProperty('spring.profiles.active')
+}
