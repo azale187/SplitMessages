@@ -13,7 +13,7 @@ class Application {
 
 
     static void main(String[] args) {
-        Options options = new WireMockConfiguration().port(8089).usingFilesUnderClasspath("stubs")
+        Options options = new WireMockConfiguration().port(8080).usingFilesUnderClasspath("stubs")
         WireMockServer wireMockServer = new WireMockServer(options)
         wireMockServer.start()
     }
