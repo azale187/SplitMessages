@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <springProfile name="prod,nonprod">
+
+        <springProperty scope="context" name="activeprofiles" source="spring.profiles.active"
+                        defaultValue="unknown"/>
+        <springProperty scope="context" name="servicename" source="spring.application.name"
+                        defaultValue="unknown"/>
+        <springProperty scope="context" name="version" source="info.build.version"
+                        defaultValue="unknown"/>
+
+        <property name="host" value="${HOSTNAME:-unknownhost}"/>
+        <!-- WARN: if you don't know exactly what all the pattern stuff is doing in the below value, and why it is the way it is, then you probably should not be changing it -->
+        <property name="SUMO_LOG_PATTERN"
+                  value="%d{yyyy-MM-dd HH:mm:ss.SSS} service=[${servicename}] profiles=[${activeprofiles}] version=[${version}] cid=[${host}] ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+        <appender name="SUMOLOGBACK" class="com.github.vitalsoftware.logging.SumoLogicAppender">
+            <springProfile name="!prod">
+                <url>
+                    https://endpoint1.collection.sumologic.com/receiver/v1/http/ZaVnC4dhaV2ZJRZ1DXUfTLA6GNuPu38Rz3Md3ZlNDkCIaTm_FqFdKqFDVpP2d4umBKQXNkOGt2Q5-oJePhWqL9xlM8udITihVuUpxIEFeaWLFY-Kh24I9Q==
+                </url>
+            </springProfile>
+            <springProfile name="prod">
+                <url>
+                    https://endpoint1.collection.sumologic.com/receiver/v1/http/ZaVnC4dhaV3-8mxYCEnlQTaYP0JK1uS1xBofJ5yGCHNfO5I2dag8Jc50sTAM6IvK63_RhtGONy4SkFapudt576Hi0rd-if6xPYo5m41UCn5FJvbNRd7IPA==
+                </url>
+            </springProfile>
+            <encoder>
+                <pattern>${SUMO_LOG_PATTERN}</pattern>
+            </encoder>
+        </appender>
+
+        <appender name="SUMOASYNC" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="SUMOLOGBACK"/>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="SUMOASYNC"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="!prod">
+        <springProfile name="!nonprod">
+            <root level="INFO">
+                <appender-ref ref="CONSOLE"/>
+            </root>
+        </springProfile>
+    </springProfile>
+</configuration>
