@@ -31,9 +31,6 @@ bootJar {
     from("${asciidoctor.outputDir}/html5") {
         into '/static/docs'
     }
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }
 
 group = 'com.bsb.fms'
