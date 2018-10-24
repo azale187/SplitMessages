@@ -3,7 +3,7 @@ package common
 class AcceptanceTestHelper {
     Map environmentConfig =
             [
-                    local  : [targetHost: 'http://localhost:8080'
+                    local  : [targetHost: 'http://localhost:8089'
                     ],
                     nonprod: [targetHost: 'https://bsb-fms-mock-service-np.bluestembrands.com'
                     ]
