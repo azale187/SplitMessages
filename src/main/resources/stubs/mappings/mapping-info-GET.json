@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "urlPattern": "actuator/info"
+    "urlPattern": "/actuator/info"
   },
   "response": {
     "status": 200,
