@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPattern": "/skus/.*"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "body-product-GET-default.json",
+    "headers": {
+      "Content-Type": "application/json; charset=UTF-8",
+      "Cache-Control": "no-cache, no-store, must-revalidate"
+    }
+  }
+}
