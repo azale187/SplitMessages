@@ -74,12 +74,12 @@ test {
     systemProperty "spring.profiles.active", System.getProperty('spring.profiles.active')
 }
 
-bootJar {
+bootJar.doFirst {
     baseName = project.name
     manifest {
         attributes(
+                "Main-Class': 'com.bsb.fms.bsbfmsmockservice.Application",
                 "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
-//                'Main-Class': 'com.bsb.fms.bsbfmsmockservice.Application'
         )
     }
     from {
