@@ -24,7 +24,6 @@ bootRun {
     jvmArgs += "-Dspring.output.ansi.enabled=ALWAYS"
 }
 
-
 group = 'com.bsb.fms'
 description = 'COFS Mock Service'
 sourceCompatibility = 1.8
@@ -51,12 +50,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('com.ryantenney.metrics:metrics-spring:3.1.3')
     compile group: 'com.github.tomakehurst', name: 'wiremock-standalone', version: '2.19.0'
-
-    // logging and tracing standardization to SumoLogic
-    compile 'com.github.vital-software:sumo-logback:61f68e2049d1b02b61fdd497d67268b1382eb319'
-    compile 'com.sumologic.plugins.log4j:sumologic-log4j2-appender:1.0'
-    compile 'ch.qos.logback:logback-classic:1.2.3' // purposely upgrade logback from spring base version
-    compile 'ch.qos.logback:logback-core:1.2.3'    // purposely upgrade logback from spring base version
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
     testCompile('org.spockframework:spock-core:1.0-groovy-2.4')
     testCompile("org.spockframework:spock-spring:1.0-groovy-2.4")
@@ -108,5 +102,3 @@ gitProperties {
 test {
     systemProperty "spring.profiles.active", System.getProperty('spring.profiles.active')
 }
-
-apply from: 'tests.gradle'

@@ -9,7 +9,6 @@ class Application {
     static void main(String[] args) {
         Options options = new WireMockConfiguration().port(8089).usingFilesUnderClasspath("stubs")
         WireMockServer wireMockServer = new WireMockServer(options)
-//        SpringApplication.run(Application.class, args)
         wireMockServer.start()
     }
 }
