@@ -78,8 +78,8 @@ bootJar {
     baseName = project.name
     manifest {
         attributes(
-                "Class-Path": configurations.compile.collect { it.getName() }.join(' '),
-                'Main-Class': 'com.bsb.fms.bsbfmsmockservice.Application'
+                "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+//                'Main-Class': 'com.bsb.fms.bsbfmsmockservice.Application'
         )
     }
     from {
