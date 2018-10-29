@@ -1,4 +1,4 @@
-package com.bsb.fms.bsbfmsmockservice
+package splitMessages
 
 import spock.lang.Specification
 

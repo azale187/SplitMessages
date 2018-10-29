@@ -2,6 +2,9 @@ buildscript {
     ext {
         springBootVersion = '2.0.6.RELEASE'
     }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
 }
 
 plugins {
@@ -10,8 +13,7 @@ plugins {
     id 'groovy'
     id 'idea'
     id 'org.springframework.boot' version '2.0.6.RELEASE'
-    id 'nebula.release' version '6.1.1'
-    id 'io.spring.dependency-management' version '1.0.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
     id 'com.gorylenko.gradle-git-properties' version '1.4.17'
 }
 
@@ -19,20 +21,17 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.2'
 }
 
-group = 'com.bsb.fms'
-description = 'COFS Mock Service'
+description = 'Split Messages'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-    maven { url "$artifactory_contexturl/$artifactory_repo" }
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
 }
 
-ext { appName = 'bsb-fms-mock-service' }
-
-repositories {
-    maven { url "$artifactory_contexturl/$artifactory_repo" }
-}
+ext { appName = 'split-messages' }
 
 ext {
     buildTime = new Date().format("yyyyMMddHHmm")
@@ -42,27 +41,10 @@ dependencies {
     compile('org.codehaus.groovy:groovy-all')
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-web')
-    compile('com.ryantenney.metrics:metrics-spring:3.1.3')
-    compile("com.github.tomakehurst:wiremock-standalone:2.14.0")
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
     testCompile('org.spockframework:spock-core:1.0-groovy-2.4')
     testCompile("org.spockframework:spock-spring:1.0-groovy-2.4")
     testCompile('org.springframework.boot:spring-boot-starter-test')
-}
-
-processResources {
-    logger.lifecycle("project.properties about to be expanded")
-    logger.lifecycle("----")
-    def map = project.properties.sort { it.key }
-
-    if (logger.isEnabled(LogLevel.DEBUG)) {
-        map.each { k, v -> logger.debug("${k}:${v}") }
-    }
-
-    filesMatching('**/application-actuatorsupport.properties') {
-        expand project.properties
-    }
 }
 
 gitProperties {
@@ -74,15 +56,6 @@ test {
     systemProperty "spring.profiles.active", System.getProperty('spring.profiles.active')
 }
 
-jar.doFirst {
+jar {
     baseName = project.name
-    manifest {
-        attributes(
-                'Main-Class': 'com.bsb.fms.bsbfmsmockservice.Application',
-                'Class-Path': configurations.runtime.collect { it.getName() }.join(' ')
-        )
-    }
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
 }
